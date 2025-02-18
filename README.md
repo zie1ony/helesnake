@@ -1,6 +1,6 @@
-# Helasnake
+# Helesnake
 
-Helasnake is a simple snake game written in JS in the browser.
+Helesnake is a simple snake game written in JS in the browser.
 
 ## Game board
 

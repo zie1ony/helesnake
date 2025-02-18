@@ -216,7 +216,7 @@
 <body>
     <div id="game" style="display: none;">
         <div id="gameHeader">
-            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
+            <image width="500" src="./images/logo_small.png" alt="Helasnake" />
         </div>
         <div id="gameState">
             <a id="gameScore">Punkty: 0</a>
@@ -228,7 +228,7 @@
     </div>
     <div id="menu">
         <div id="menuHeader">
-            <image width="500" src="/images/logo_large.png" alt="Helasnake" />
+            <image width="500" src="./images/logo_large.png" alt="Helasnake" />
         </div>
         <div id="nameInput">
             <input type="text" id="playerName" placeholder="Podaj swoje imię" />
@@ -254,7 +254,7 @@
     </div>
     <div id="gameOver">
         <div id="gameHeader">
-            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
+            <image width="500" src="./images/logo_small.png" alt="Helasnake" />
         </div>
         <h1>Game Over!</h1>
         <p>Wynik: <span id="finalScore">0</span></p>
@@ -293,7 +293,7 @@
 
         // Preload snake head image
         const snakeHeadImage = new Image();
-        snakeHeadImage.src = '/images/snake_hela.jpg';
+        snakeHeadImage.src = './images/snake_hela.jpg';
 
         // Preload apple images
         const appleImages = {
@@ -308,16 +308,16 @@
             kluski: new Image(),
             andrzej: new Image()
         };
-        appleImages.ewa.src = '/images/apple_ewa.jpg';
-        appleImages.dawid.src = '/images/apple_dawid.jpg';
-        appleImages.pawel.src = '/images/apple_pawel.jpg';
-        appleImages.ola.src = '/images/apple_ola.jpg';
-        appleImages.ala.src = '/images/apple_ala.jpg';
-        appleImages.kuba.src = '/images/apple_kuba.jpg';
-        appleImages.maciek.src = '/images/apple_maciek.jpg';
-        appleImages.ania.src = '/images/apple_ania.jpg';
-        appleImages.kluski.src = '/images/apple_kluski.jpg';
-        appleImages.andrzej.src = '/images/apple_andrzej.jpg';
+        appleImages.ewa.src = './images/apple_ewa.jpg';
+        appleImages.dawid.src = './images/apple_dawid.jpg';
+        appleImages.pawel.src = './images/apple_pawel.jpg';
+        appleImages.ola.src = './images/apple_ola.jpg';
+        appleImages.ala.src = './images/apple_ala.jpg';
+        appleImages.kuba.src = './images/apple_kuba.jpg';
+        appleImages.maciek.src = './images/apple_maciek.jpg';
+        appleImages.ania.src = './images/apple_ania.jpg';
+        appleImages.kluski.src = './images/apple_kluski.jpg';
+        appleImages.andrzej.src = './images/apple_andrzej.jpg';
         
         // Array of apple types to choose from
         const appleTypes = ['ewa', 'dawid', 'pawel', 'ola', 'ala', 'kuba', 'maciek', 'ania', 'andrzej'];

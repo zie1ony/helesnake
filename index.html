@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Helesnake</title>
+    <style>
+        body {
+            background: #ffa1bb;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        #gameHeader {
+            width: 100%;
+            text-align: center;
+            /* padding: 20px 0; */
+        }
+        #gameCanvas {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #menuContent {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .funButton {
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1.5em;
+            padding: 12px 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s;
+            border: 2px dashed #ff69b4;
+            width: 300px;
+        }
+
+        .funButton:hover {
+            transform: scale(1.05);
+        }
+
+        .funButton:active {
+            transform: scale(0.95);
+        }
+
+        .funButton::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #fff 10%, transparent 10%);
+            background-size: 10px 10px;
+            opacity: 0.5;
+            animation: ping 1s infinite;
+        }
+
+        @keyframes ping {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            80% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        #leaderboard {
+            margin-top: 20px;
+            text-align: center;
+            background: radial-gradient(circle, #ffe4e1, #ffb6c1);
+            border: 2px dashed #ff69b4;
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 6px 8px rgba(255, 105, 180, 0.4);
+        }
+        #leaderboard table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        #leaderboard th,
+        #leaderboard td {
+            padding: 10px;
+            border: 1px solid #ffc0cb;
+        }
+        #leaderboard th {
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+            color: #fff;
+        }
+        #leaderboard p {
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff1493;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        /* Game State Styles */
+        #gameState {
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ffb3c1, #ffc1d0);
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #gameScore,
+        #gameLength {
+            display: inline-block;
+            width: 50%;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #d6336c;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+         /* Game Over Styles: Cool and Sweet */
+        #gameOver {
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+
+        #gameOver h1 {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #gameOver p {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 24px;
+            margin: 10px 0;
+            color: #fff;
+        }
+
+        #gameOver span {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-size: 28px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        #gameOverButtons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #restartButton,
+        #toMenuButton {
+            margin-top: 10px;
+        }
+
+         /* Name Input Styles - Fun, Pink & Playful */
+         #nameInput {
+      margin: 20px 0;
+      text-align: center;
+  }
+
+  #nameInput input#playerName {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: 20px;
+      padding: 12px 20px;
+      width: 260px;
+      border: none;
+      border-radius: 30px;
+      background: radial-gradient(circle, #ffadcf, #ff69b4);
+      color: #fff;
+      text-align: center;
+      outline: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.3s, transform 0.2s;
+  }
+
+  #nameInput input#playerName:focus {
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.9);
+      transform: scale(1.05);
+  }
+
+    </style>
+</head>
+<body>
+    <div id="game" style="display: none;">
+        <div id="gameHeader">
+            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
+        </div>
+        <div id="gameState">
+            <a id="gameScore">Punkty: 0</a>
+            <a id="gameLength">Długość: 1</a>
+        </div>
+        <div>
+            <canvas id="gameCanvas" width="500" height="500"></canvas>
+        </div>
+    </div>
+    <div id="menu">
+        <div id="menuHeader">
+            <image width="500" src="/images/logo_large.png" alt="Helasnake" />
+        </div>
+        <div id="nameInput">
+            <input type="text" id="playerName" placeholder="Podaj swoje imię" />
+        </div>
+        <div id="menuContent">
+            <button id="startButton" class="funButton">GRAJ</button>
+        </div>
+        <div id="leaderboard">
+            <p>Najlepsze wyniki!</p>
+            <table>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Wynik</th>
+                    <th>Długość</th>
+                </tr>
+                <tr>
+                    <td>XXX</td>
+                    <td>10</td>
+                    <td>24</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div id="gameOver">
+        <div id="gameHeader">
+            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
+        </div>
+        <h1>Game Over!</h1>
+        <p>Wynik: <span id="finalScore">0</span></p>
+        <p>Długość: <span id="finalLength">1</span></p>
+        <div id="gameOverButtons">
+            <button id="restartButton" class="funButton">Zagraj ponownie</button>
+            <button id="toMenuButton" class="funButton">Powrót do menu</button>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Board configuration
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+        const appleSize = 2; // apples drawn as 2x2 (even though README says 3x3, we use current setting)
+
+        let gameActive = false;
+        let playerName = null;
+
+        // Snake
+        let snake = [{x: 10, y: 10}];
+        let velocity = {x: 1, y: 0};
+        let score = 0;
+        const normalSpeed = 80;
+        let currentSpeed = normalSpeed;
+        let gameInterval = setInterval(gameLoop, currentSpeed);
+        let apples = [];
+        let uncreatedTails = 0;
+        const minApples = 4;
+
+        // Speed effect state ("increase" or "decrease")
+        let speedEffect = null;
+        let speedEffectTimer = null;
+
+        // Preload snake head image
+        const snakeHeadImage = new Image();
+        snakeHeadImage.src = '/images/snake_hela.jpg';
+
+        // Preload apple images
+        const appleImages = {
+            ewa: new Image(),
+            dawid: new Image(),
+            pawel: new Image(),
+            ola: new Image(),
+            ala: new Image(),
+            kuba: new Image(),
+            maciek: new Image(),
+            ania: new Image(),
+            kluski: new Image(),
+            andrzej: new Image()
+        };
+        appleImages.ewa.src = '/images/apple_ewa.jpg';
+        appleImages.dawid.src = '/images/apple_dawid.jpg';
+        appleImages.pawel.src = '/images/apple_pawel.jpg';
+        appleImages.ola.src = '/images/apple_ola.jpg';
+        appleImages.ala.src = '/images/apple_ala.jpg';
+        appleImages.kuba.src = '/images/apple_kuba.jpg';
+        appleImages.maciek.src = '/images/apple_maciek.jpg';
+        appleImages.ania.src = '/images/apple_ania.jpg';
+        appleImages.kluski.src = '/images/apple_kluski.jpg';
+        appleImages.andrzej.src = '/images/apple_andrzej.jpg';
+        
+        // Array of apple types to choose from
+        const appleTypes = ['ewa', 'dawid', 'pawel', 'ola', 'ala', 'kuba', 'maciek', 'ania', 'andrzej'];
+
+        document.addEventListener('keydown', keyDown);
+        keysLocked = true;
+
+        function snakeFullLength() {
+            return snake.length + uncreatedTails;
+        }
+
+        function doubleSnakeLength() {
+            let fullLength = snakeFullLength();
+            uncreatedTails += (fullLength - 1);
+        }
+
+        function halfSnakeLength() {
+            let fullLength = snakeFullLength();
+            let targetLength = Math.floor(fullLength / 2);
+            let realLength = snake.length;
+            const reduction = fullLength - targetLength;
+            let reductionRemaining = reduction;
+            if (uncreatedTails >= reductionRemaining) {
+                uncreatedTails -= reductionRemaining;
+            } else {
+                reductionRemaining -= uncreatedTails;
+                uncreatedTails = 0;
+                while (reductionRemaining > 0 && snake.length > 1) {
+                    snake.pop();
+                    reductionRemaining--;
+                }
+            }
+        }
+
+        function addPoints(points) {
+            score += points;
+            document.getElementById('gameScore').innerText = 'Punkty: ' + score;
+        }
+
+        function updateLength() {
+            document.getElementById('gameLength').innerText = 'Długość: ' + snake.length;
+        }
+
+        function gameLoop() {
+            if (!gameActive) {
+                return;
+            }
+
+            // update snake position
+            const head = { x: snake[0].x + velocity.x, y: snake[0].y + velocity.y };
+
+            // wrap snake position around the canvas
+            if (head.x < 0) head.x = tileCount - 1;
+            else if (head.x >= tileCount) head.x = 0;
+            if (head.y < 0) head.y = tileCount - 1;
+            else if (head.y >= tileCount) head.y = 0;
+
+            // collision with self
+            for (let segment of snake) {
+                if (segment.x === head.x && segment.y === head.y) {
+                    return gameOver();
+                }
+            }
+            snake.unshift(head);
+
+            // Check for apple collision (if snake's head is within apple's area)
+            let appleEaten = false;
+            for (let i = 0; i < apples.length; i++) {
+                const apple = apples[i];
+                if (
+                    head.x >= apple.x && head.x < apple.x + appleSize &&
+                    head.y >= apple.y && head.y < apple.y + appleSize
+                ) {
+                    applyAppleEffect(apple);
+                    apples.splice(i, 1);
+                    appleEaten = true;
+                    break;
+                }
+            }
+
+            if (!appleEaten) {
+                if (uncreatedTails > 0) {
+                    uncreatedTails--;
+                } else {
+                    // if no apple was eaten, remove the tail segment
+                    snake.pop();
+                }
+            }
+
+            // ensure at least 3 apples on the board
+            ensureApples();
+            draw();
+            keysLocked = false;
+            updateLength();
+        }
+
+        function draw() {
+            // clear canvas
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // draw apples as 2x2 areas using their images (or fallback rectangle)
+            apples.forEach(apple => {
+                if (appleImages[apple.type] && appleImages[apple.type].complete) {
+                    ctx.drawImage(appleImages[apple.type], apple.x * gridSize, apple.y * gridSize, gridSize * appleSize, gridSize * appleSize);
+                } else {
+                    // fallback color if image not loaded
+                    ctx.fillStyle = 'gray';
+                    ctx.fillRect(apple.x * gridSize, apple.y * gridSize, gridSize * appleSize, gridSize * appleSize);
+                }
+            });
+
+            // draw snake: head uses image (100% larger), body uses green rectangles
+            // reversing order so that the head (first element) is drawn last for centering
+            [...snake].reverse().forEach((segment, index, arr) => {
+                if (index === arr.length - 1) {
+                    const normalSize = gridSize - 2;
+                    const enlargedSize = normalSize * 2;
+                    const drawX = segment.x * gridSize - (enlargedSize - normalSize) / 2;
+                    const drawY = segment.y * gridSize - (enlargedSize - normalSize) / 2;
+                    ctx.drawImage(snakeHeadImage, drawX, drawY, enlargedSize, enlargedSize);
+
+                } else {
+                    ctx.fillStyle = 'green';
+                    ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+                }
+            });
+
+            // display score
+            // ctx.fillStyle = '#000';
+            // ctx.font = '20px Arial';
+            // ctx.fillText('Points: ' + score, 10, 20);
+            // ctx.fillText('Length: ' + snake.length, 10, 40);
+            // ctx.fillText('Reamining tails: ' + uncreatedTails, 10, 60);
+        }
+
+        function keyDown(event) {
+            if (keysLocked) return;
+            switch(event.key) {
+                case "ArrowUp":
+                    if (velocity.y === 1) break;
+                    velocity = {x: 0, y: -1};
+                    break;
+                case "ArrowDown":
+                    if (velocity.y === -1) break;
+                    velocity = {x: 0, y: 1};
+                    break;
+                case "ArrowLeft":
+                    if (velocity.x === 1) break;
+                    velocity = {x: -1, y: 0};
+                    break;
+                case "ArrowRight":
+                    if (velocity.x === -1) break;
+                    velocity = {x: 1, y: 0};
+                    break;
+            }
+            keysLocked = true;
+        }
+
+        // Returns a new apple that fits entirely on the board.
+        function randomApple() {
+            const type = appleTypes[Math.floor(Math.random() * appleTypes.length)];
+            return {
+                x: Math.floor(Math.random() * (tileCount - appleSize)),
+                y: Math.floor(Math.random() * (tileCount - appleSize)),
+                type: type
+            };
+        }
+
+        // Ensures that the apple's 2x2 area does not intersect with snake or other apples.
+        function isAreaFreeForApple(apple) {
+            for (let segment of snake) {
+                if (segment.x >= apple.x && segment.x < apple.x + appleSize &&
+                    segment.y >= apple.y && segment.y < apple.y + appleSize)
+                    return false;
+            }
+            for (let other of apples) {
+                if (apple.x < other.x + appleSize && apple.x + appleSize > other.x &&
+                    apple.y < other.y + appleSize && apple.y + appleSize > other.y)
+                    return false;
+            }
+            return true;
+        }
+
+        function ensureApples() {
+            while (apples.length < minApples) {
+                let newApple = randomApple();
+                let attempts = 0;
+                while (!isAreaFreeForApple(newApple) && attempts < 50) {
+                    newApple = randomApple();
+                    attempts++;
+                }
+                if (isAreaFreeForApple(newApple)) {
+                    apples.push(newApple);
+                }
+            }
+        }
+
+        // Helper: Add an apple of type 'kluski' ensuring valid placement.
+        function addAppleKluski() {
+            let newApple = { type: 'kluski' };
+            let attempts = 0;
+            do {
+                newApple.x = Math.floor(Math.random() * (tileCount - appleSize));
+                newApple.y = Math.floor(Math.random() * (tileCount - appleSize));
+                attempts++;
+            } while (!isAreaFreeForApple(newApple) && attempts < 50);
+            if (isAreaFreeForApple(newApple)) {
+                apples.push(newApple);
+            }
+        }
+
+        // Speed effect functions for Ewa (increase) and Dawid (decrease)
+        function setSpeedEffect(effect, duration) {
+            if (speedEffect === effect) {
+                clearTimeout(speedEffectTimer);
+                speedEffectTimer = setTimeout(resetSpeed, duration);
+            } else {
+                // if an opposite effect is active, cancel it first
+                if (speedEffect !== null && speedEffect !== effect) {
+                    resetSpeed();
+                }
+                speedEffect = effect;
+                if (effect === 'increase') {
+                    currentSpeed = normalSpeed / 2; // speed is 2x faster
+                } else if (effect === 'decrease') {
+                    currentSpeed = normalSpeed * 2; // speed is 2x slower
+                }
+                clearInterval(gameInterval);
+                gameInterval = setInterval(gameLoop, currentSpeed);
+                speedEffectTimer = setTimeout(resetSpeed, duration);
+            }
+        }
+
+        function resetSpeed() {
+            speedEffect = null;
+            currentSpeed = normalSpeed;
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, currentSpeed);
+        }
+
+        // Applies the effect of an apple that was eaten.
+        function applyAppleEffect(apple) {
+            // Use the tail to add a segment when needed.
+            const tail = snake[snake.length - 1];
+            switch(apple.type) {
+                case 'ewa':
+                    addPoints(10);
+                    // Increase game speed by 2x for 5 seconds (5000 ms)
+                    setSpeedEffect('increase', 5000);
+                    break;
+                case 'dawid':
+                    addPoints(20);
+                    // Decrease game speed (i.e. slower) by 2x for 5 seconds.
+                    setSpeedEffect('decrease', 5000);
+                    break;
+                case 'pawel':
+                    addPoints(30);
+                    // Set snake length to half (min 1)
+                    halfSnakeLength();
+                    break;
+                case 'ola':
+                    addPoints(300);
+                    break;
+                case 'ala':
+                    addPoints(-100);
+                    break;
+                case 'kuba':
+                    addPoints(50);
+                    // Double the snake's length
+                    doubleSnakeLength();
+                    break;
+                case 'maciek':
+                    addPoints(50);
+                    // Move head to tail and reverse direction
+                    snake = snake.reverse();
+                    if (snake.length > 1) {
+                        const tailDirection = {
+                            x: snake[0].x - snake[1].x,
+                            y: snake[0].y - snake[1].y
+                        };
+                        velocity = tailDirection;
+                        console.log(velocity)
+                    } else {
+                        velocity = { x: -velocity.x, y: -velocity.y };
+                    }
+                    break;
+                case 'ania':
+                    addPoints(50);
+                    // Generate 3 additional Apple Kluski
+                    for (let i = 0; i < 3; i++) {
+                        addAppleKluski();
+                    }
+                    break;
+                case 'kluski':
+                    addPoints(100);
+                    uncreatedTails += 3;
+                    break;
+                case 'andrzej':
+                    addPoints(50);
+                    snake.push({x: tail.x, y: tail.y});
+                    // Generate 3 additional random apples
+                    for (let i = 0; i < 3; i++) {
+                        let newApple = randomApple();
+                        // Ensure valid placement
+                        let attempts = 0;
+                        while (!isAreaFreeForApple(newApple) && attempts < 50) {
+                            newApple = randomApple();
+                            attempts++;
+                        }
+                        if (isAreaFreeForApple(newApple)) {
+                            apples.push(newApple);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        function gameOver() {
+            clearInterval(gameInterval);
+            displayGameOver();
+            addScore(playerName, score, snake.length);
+            // console.log('Game over! Score: ' + score);
+            // console.log('Snake length: ' + snake.length);
+            // reset game state
+            // snake = [{x: 10, y: 10}];
+            // velocity = {x: 0, y: 0};
+            // apples = [];
+            // score = 0;
+            // currentSpeed = normalSpeed;
+            // resetSpeed();
+            // gameInterval = setInterval(gameLoop, currentSpeed);
+        }
+
+        function startGame() {
+            snake = [{x: 10, y: 10}];
+            velocity = {x: 1, y: 0};
+            apples = [];
+            score = 0;
+            currentSpeed = normalSpeed;
+            uncreatedTails = 0;
+            resetSpeed();
+        }
+
+        // JSONBIN
+
+        const BIN_ID = "67b48b73ad19ca34f80859d4";
+
+        async function addScore(player, score, length) {
+            // Fetch existing scores
+            let response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+            let data = await response.json();
+            let scores = data.record;
+
+            // Add new score
+            scores.results.push({ player: player, score: score, lenght: length, time: new Date().toISOString() });
+            
+            console.log(scores);
+            // Send updated scores to JSONBin.io
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(scores)
+            });
+
+            console.log("Score added successfully!");
+        }
+
+        async function loadScores() {
+            let response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`);
+            let data = await response.json();
+            let scores = data.record.results;
+
+            let top5 = scores.sort((a, b) => b.score - a.score).slice(0, 5);
+            let table = document.querySelector('#leaderboard table');
+            
+            // Clear existing rows but keep the header
+            table.querySelectorAll('tr:not(:first-child)').forEach(row => row.remove());
+
+            top5.forEach((result, index) => {
+                let row = document.createElement('tr');
+                let nameCell = document.createElement('td');
+                nameCell.innerText = result.player;
+                let scoreCell = document.createElement('td');
+                scoreCell.innerText = result.score;
+                let lengthCell = document.createElement('td');
+                lengthCell.innerText = result.lenght;
+                row.appendChild(nameCell);
+                row.appendChild(scoreCell);
+                row.appendChild(lengthCell);
+                table.appendChild(row);
+            });
+        }
+
+        function displayGame() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('gameOver').style.display = 'none';
+            gameActive = true;
+            startGame();
+        }
+
+        function displayMenu() {
+            document.getElementById('menu').style.display = 'block';
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'none';
+            gameActive = false;
+            loadScores();
+        }
+
+        function displayGameOver() {
+            document.getElementById('menu').style.display = 'none';
+            document.getElementById('game').style.display = 'none';
+            document.getElementById('gameOver').style.display = 'block';
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('finalLength').innerText = snake.length;
+            document.querySelector('#gameOver h1').innerText = 'Game Over ' + playerName + "!";
+            gameActive = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('startButton').addEventListener('click', function() {
+                const playerNameInput = document.getElementById('playerName');
+                if (!playerNameInput.value.trim()) {
+                    playerNameInput.focus();
+                    return;
+                } else {
+                    playerName = playerNameInput.value.trim();
+                }
+                displayGame();
+            });
+            document.getElementById('restartButton').addEventListener('click', function() {
+                displayGame();
+            });
+            document.getElementById('toMenuButton').addEventListener('click', function() {
+                displayMenu();
+            });
+            
+            document.getElementById('playerName').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    document.getElementById('startButton').click();
+                }
+            });
+
+            loadScores();
+        });
+    </script>
+</body>
+</html>

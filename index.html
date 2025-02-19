@@ -321,7 +321,7 @@
                 </tr>
                 <tr>
                     <td>Paweł</td>
-                    <td><image width="80px" src="./images/apple_pawel.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_pawel.png"></image></td>
                     <td>+50 punktów<br>To Twój najlepszy przyjaciel.<br>Skraca węża o połowę.</td>
                 </tr>
                 <tr>
@@ -331,12 +331,12 @@
                 </tr>
                 <tr>
                     <td>Dawid</td>
-                    <td><image width="80px" src="./images/apple_dawid.jpg"></image></td>
-                    <td>+50 punktów<br>Dodaje 3 nowe postacie na planszy.</td>
+                    <td><image width="80px" src="./images/apple_dawid.png"></image></td>
+                    <td>+50 punktów<br>Właśnie wrócił z wędkowania.<br>Dodaje 3 nowe postacie na planszę.</td>
                 </tr>
                 <tr>
                     <td>Ola</td>
-                    <td><image width="80px" src="./images/apple_ola.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_ola.png"></image></td>
                     <td>+300 punktów<br>Ola daje najwięcej punktów!</td>
                 </tr>
                 <tr>
@@ -346,7 +346,7 @@
                 </tr>
                 <tr>
                     <td>Ala</td>
-                    <td><image width="80px" src="./images/apple_ala.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_ala.png"></image></td>
                     <td>-300 punktów<br>Ala zabiera punkty. Unikaj jej!<br>Tylko Kuba może sprawić,<br>że Ala zniknie z planszy.</td>
                 </tr>
                 <tr>
@@ -356,19 +356,22 @@
                 </tr>
                 <tr>
                     <td>Ania</td>
-                    <td><image width="80px" src="./images/apple_ania.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_ania.png"></image></td>
                     <td>+50 punktów<br>Dodaje 3 kluski parowe na planszy.</td>
                 </tr>
                 <tr>
                     <td>Kluski</td>
-                    <td><image width="80px" src="./images/apple_kluski.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_kluski.png"></image></td>
                     <td>+100 punktów<br>Ummmmmmm, jakie dobre :)</td>
                 </tr>
                 <tr>
                     <td>Andrzej</td>
-                    <td><image width="80px" src="./images/apple_andrzej.jpg"></image></td>
+                    <td><image width="80px" src="./images/apple_andrzej.png"></image></td>
                     <td>+50 punktów<br>Podwaja długość węża.</td>
             </table>
+        </div>
+        <div id="footer">
+            <p>Dla Heleny od Oli i Maćka ❤️</p>
         </div>
     </div>
     <div id="game" style="display: none;">
@@ -448,15 +451,15 @@
             andrzej: new Image()
         };
         appleImages.ewa.src = './images/apple_ewa.jpg';
-        appleImages.dawid.src = './images/apple_dawid.jpg';
-        appleImages.pawel.src = './images/apple_pawel.jpg';
-        appleImages.ola.src = './images/apple_ola.jpg';
-        appleImages.ala.src = './images/apple_ala.jpg';
+        appleImages.dawid.src = './images/apple_dawid.png';
+        appleImages.pawel.src = './images/apple_pawel.png';
+        appleImages.ola.src = './images/apple_ola.png';
+        appleImages.ala.src = './images/apple_ala.png';
         appleImages.kuba.src = './images/apple_kuba.jpg';
         appleImages.maciek.src = './images/apple_maciek.jpg';
-        appleImages.ania.src = './images/apple_ania.jpg';
-        appleImages.kluski.src = './images/apple_kluski.jpg';
-        appleImages.andrzej.src = './images/apple_andrzej.jpg';
+        appleImages.ania.src = './images/apple_ania.png';
+        appleImages.kluski.src = './images/apple_kluski.png';
+        appleImages.andrzej.src = './images/apple_andrzej.png';
         
         // Array of apple types to choose from
         const appleTypes = ['ewa', 'dawid', 'pawel', 'ola', 'ala', 'kuba', 'maciek', 'ania', 'andrzej'];
@@ -850,6 +853,9 @@
         }
 
         function displayGame() {
+            // Prevent scrolling
+            document.body.style.overflow = 'hidden';
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             document.getElementById('menu').style.display = 'none';
             document.getElementById('game').style.display = 'block';
             document.getElementById('gameOver').style.display = 'none';
@@ -858,6 +864,7 @@
         }
 
         function displayMenu() {
+            document.body.style.overflow = 'auto';
             document.getElementById('menu').style.display = 'block';
             document.getElementById('game').style.display = 'none';
             document.getElementById('gameOver').style.display = 'none';
@@ -866,6 +873,7 @@
         }
 
         function displayGameOver() {
+            document.body.style.overflow = 'auto';
             document.getElementById('menu').style.display = 'none';
             document.getElementById('game').style.display = 'none';
             document.getElementById('gameOver').style.display = 'block';

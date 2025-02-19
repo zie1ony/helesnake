@@ -83,10 +83,19 @@
             background: radial-gradient(circle, #ffe4e1, #ffb6c1);
             border: 2px dashed #ff69b4;
             border-radius: 20px;
-            padding: 20px 20px;
+            padding: 0px 20px;
+            padding-bottom: 20px;
             width: 90%;
             max-width: 600px;
             box-shadow: 0 6px 8px rgba(255, 105, 180, 0.4);
+        }
+
+        .menuSection h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff1493;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
         }
 
         #menu {
@@ -136,14 +145,22 @@
             background: linear-gradient(135deg, #ffb6c1, #ff69b4);
             color: #fff;
         }
-        #leaderboard p {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff1493;
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
-            margin-bottom: 15px;
+
+        /* Info */
+        #info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        #info table td {
+            padding: 10px;
+            border: 1px solid #ffc0cb;
         }
 
+        #info table image {
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
 
 
         /* Game */        
@@ -222,11 +239,12 @@
             <image width="500" src="./images/logo_large.png"/>
         </div>
         <div class="menuSection">
+            <h2>Nowa gra</h2>
             <input type="text" id="playerName" placeholder="Podaj swoje imię" />
-            <button id="startButton" class="funButton">GRAJ</button>
+            <button id="startButton" class="funButton">START</button>
         </div>
         <div id="leaderboard" class="menuSection">
-            <p>Najlepsze wyniki!</p>
+            <h2>Najlepsze wyniki!</h2>
             <table>
                 <tr>
                     <th>Nazwa</th>
@@ -261,7 +279,63 @@
             </table>
         </div>
         <div id="info" class="menuSection">
-
+            <h2>Postacie</h2>
+            <table>
+                <tr>
+                    <td>Helesnake</td>
+                    <td><image width="80px" src="./images/snake_hela.jpg"></image></td>
+                    <td>Pomóż jej zebrać jak najwięcej punktów!</td>
+                </tr>
+                <tr>
+                    <td>Paweł</td>
+                    <td><image width="80px" src="./images/apple_pawel.jpg"></image></td>
+                    <td>+40 punktów<br>To Twój najlepszy przyjaciel.<br>Skraca węża o połowę.</td>
+                </tr>
+                <tr>
+                    <td>Ewa</td>
+                    <td><image width="80px" src="./images/apple_ewa.jpg"></image></td>
+                    <td>+10 punktów<br>Przyspiesza węża na 5 sekund.<br>Może dzięki temu posprzątasz szybciej pokój?</td>
+                </tr>
+                <tr>
+                    <td>Dawid</td>
+                    <td><image width="80px" src="./images/apple_dawid.jpg"></image></td>
+                    <td>+50 punktów<br>Dodaje 3 nowe postacie na planszy.</td>
+                </tr>
+                <tr>
+                    <td>Ola</td>
+                    <td><image width="80px" src="./images/apple_ola.jpg"></image></td>
+                    <td>+300 punktów<br>Ola daje najwięcej punktów!</td>
+                </tr>
+                <tr>
+                    <td>Maciek</td>
+                    <td><image width="80px" src="./images/apple_maciek.jpg"></image></td>
+                    <td>+50 punktów<br>Odwraca węża i zmienia kierunek.</td>
+                </tr>
+                <tr>
+                    <td>Ala</td>
+                    <td><image width="80px" src="./images/apple_ala.jpg"></image></td>
+                    <td>-100 punktów<br>Ala zabiera punkty. Unikaj jej!<br>Tylko Kuba może sprawić,<br>że Ala zniknie z planszy.</td>
+                </tr>
+                <tr>
+                    <td>Kuba</td>
+                    <td><image width="80px" src="./images/apple_kuba.jpg"></image></td>
+                    <td>+20 punktów<br>Usuwa wszystkie jabłka z planszy.<br>Potem pojawiają się nowe.</td>
+                </tr>
+                <tr>
+                    <td>Ania</td>
+                    <td><image width="80px" src="./images/apple_ania.jpg"></image></td>
+                    <td>+50 punktów<br>Dodaje 3 kluski parowe na planszy.</td>
+                </tr>
+                <tr>
+                    <td>Kluski</td>
+                    <td><image width="80px" src="./images/apple_kluski.jpg"></image></td>
+                    <td>+100 punktów<br>Ummmmmmm, jakie dobre :)</td>
+                </tr>
+                <tr>
+                    <td>Andrzej</td>
+                    <td><image width="80px" src="./images/apple_andrzej.jpg"></image></td>
+                    <td>+50 punktów<br>Podwaja długość węża.</td>
+            </table>
         </div>
     </div>
     <div id="game" style="display: none;">
@@ -598,7 +672,7 @@
                     // Increase game speed by 2x for 5 seconds (5000 ms)
                     setSpeedEffect('increase', 3000);
                     break;
-                case 'andrzej':
+                case 'kuba':
                     addPoints(20);
                     // remove all apples
                     apples = [];
@@ -614,7 +688,7 @@
                 case 'ala':
                     addPoints(-100);
                     break;
-                case 'kuba':
+                case 'andrzej':
                     addPoints(50);
                     // Double the snake's length
                     doubleSnakeLength();

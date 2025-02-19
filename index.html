@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Helesnake</title>
+    <title>Helsnake</title>
     <style>
         body {
             background: #ffa1bb;
@@ -11,29 +11,10 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-        }
-        
-        #gameHeader {
-            width: 100%;
-            text-align: center;
-            /* padding: 20px 0; */
-        }
-        #gameCanvas {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
-        #menu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #menuContent {
-            text-align: center;
-            margin-top: 20px;
-        }
+        /* General button */
 
         .funButton {
             background: linear-gradient(45deg, #ff9a9e, #fad0c4);
@@ -87,16 +68,55 @@
             }
         }
 
-        #leaderboard {
+        /* Header */
+        .gameHeader {
+            width: 100%;
+            text-align: center;
+            /* padding: 20px 0; */
+        }
+
+        /* Menu */
+
+        .menuSection {
             margin-top: 20px;
             text-align: center;
             background: radial-gradient(circle, #ffe4e1, #ffb6c1);
             border: 2px dashed #ff69b4;
             border-radius: 20px;
-            padding: 20px;
+            padding: 20px 20px;
             width: 90%;
             max-width: 600px;
             box-shadow: 0 6px 8px rgba(255, 105, 180, 0.4);
+        }
+
+        #menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #playerName {
+            font-size: 20px;
+            margin-bottom: 10px;
+            padding: 12px 20px;
+            width: 260px;
+            border: none;
+            border-radius: 30px;
+            background: radial-gradient(circle, #ffadcf, #ff69b4);
+            color: #fff;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s, transform 0.2s;
+        }
+
+        #playerName:focus {
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.9);
+            transform: scale(1.05);
+        }
+
+        #leaderboard {
+            padding: 0 20px;
         }
         #leaderboard table {
             width: 100%;
@@ -113,13 +133,21 @@
             color: #fff;
         }
         #leaderboard p {
-            font-family: 'Arial', sans-serif;
             font-size: 24px;
             font-weight: bold;
             color: #ff1493;
             text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
             margin-bottom: 15px;
         }
+
+        #gameCanvas {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+
+        /* Game */        
 
         /* Game State Styles */
         #gameState {
@@ -137,7 +165,6 @@
         #gameLength {
             display: inline-block;
             width: 50%;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
             color: #d6336c;
             font-size: 24px;
             font-weight: bold;
@@ -146,14 +173,12 @@
             text-align: center;
         }
 
-         /* Game Over Styles: Cool and Sweet */
+        /* Game Over Styles: Cool and Sweet */
         #gameOver {
-            display: none; /* Hidden by default */
             text-align: center;
         }
 
         #gameOver h1 {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
             font-size: 36px;
             margin-bottom: 20px;
             color: #ffffff;
@@ -161,14 +186,12 @@
         }
 
         #gameOver p {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
             font-size: 24px;
             margin: 10px 0;
             color: #fff;
         }
 
         #gameOver span {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
             font-size: 28px;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
@@ -185,38 +208,58 @@
             margin-top: 10px;
         }
 
-         /* Name Input Styles - Fun, Pink & Playful */
-         #nameInput {
-      margin: 20px 0;
-      text-align: center;
-  }
-
-  #nameInput input#playerName {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      font-size: 20px;
-      padding: 12px 20px;
-      width: 260px;
-      border: none;
-      border-radius: 30px;
-      background: radial-gradient(circle, #ffadcf, #ff69b4);
-      color: #fff;
-      text-align: center;
-      outline: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: box-shadow 0.3s, transform 0.2s;
-  }
-
-  #nameInput input#playerName:focus {
-      box-shadow: 0 0 20px rgba(255, 105, 180, 0.9);
-      transform: scale(1.05);
-  }
+  
 
     </style>
 </head>
 <body>
+    <div id="menu">
+        <div class="gameHeader">
+            <image width="500" src="/images/logo_large.png"/>
+        </div>
+        <div class="menuSection">
+            <input type="text" id="playerName" placeholder="Podaj swoje imię" />
+            <button id="startButton" class="funButton">GRAJ</button>
+        </div>
+        <div id="leaderboard" class="menuSection">
+            <p>Najlepsze wyniki!</p>
+            <table>
+                <tr>
+                    <th>Nazwa</th>
+                    <th>Wynik</th>
+                    <th>Długość</th>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>.</td>
+                    <td>.</td>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>.</td>
+                    <td>.</td>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>.</td>
+                    <td>.</td>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>.</td>
+                    <td>.</td>
+                </tr>
+                <tr>
+                    <td>.</td>
+                    <td>.</td>
+                    <td>.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
     <div id="game" style="display: none;">
-        <div id="gameHeader">
-            <image width="500" src="./images/logo_small.png" alt="Helasnake" />
+        <div class="gameHeader">
+            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
         </div>
         <div id="gameState">
             <a id="gameScore">Punkty: 0</a>
@@ -226,35 +269,9 @@
             <canvas id="gameCanvas" width="500" height="500"></canvas>
         </div>
     </div>
-    <div id="menu">
-        <div id="menuHeader">
-            <image width="500" src="./images/logo_large.png" alt="Helasnake" />
-        </div>
-        <div id="nameInput">
-            <input type="text" id="playerName" placeholder="Podaj swoje imię" />
-        </div>
-        <div id="menuContent">
-            <button id="startButton" class="funButton">GRAJ</button>
-        </div>
-        <div id="leaderboard">
-            <p>Najlepsze wyniki!</p>
-            <table>
-                <tr>
-                    <th>Nazwa</th>
-                    <th>Wynik</th>
-                    <th>Długość</th>
-                </tr>
-                <tr>
-                    <td>XXX</td>
-                    <td>10</td>
-                    <td>24</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div id="gameOver">
-        <div id="gameHeader">
-            <image width="500" src="./images/logo_small.png" alt="Helasnake" />
+    <div id="gameOver" style="display: none;">
+        <div class="gameHeader">
+            <image width="500" src="/images/logo_small.png" alt="Helasnake" />
         </div>
         <h1>Game Over!</h1>
         <p>Wynik: <span id="finalScore">0</span></p>
@@ -293,7 +310,7 @@
 
         // Preload snake head image
         const snakeHeadImage = new Image();
-        snakeHeadImage.src = './images/snake_hela.jpg';
+        snakeHeadImage.src = '/images/snake_hela.jpg';
 
         // Preload apple images
         const appleImages = {
@@ -308,16 +325,16 @@
             kluski: new Image(),
             andrzej: new Image()
         };
-        appleImages.ewa.src = './images/apple_ewa.jpg';
-        appleImages.dawid.src = './images/apple_dawid.jpg';
-        appleImages.pawel.src = './images/apple_pawel.jpg';
-        appleImages.ola.src = './images/apple_ola.jpg';
-        appleImages.ala.src = './images/apple_ala.jpg';
-        appleImages.kuba.src = './images/apple_kuba.jpg';
-        appleImages.maciek.src = './images/apple_maciek.jpg';
-        appleImages.ania.src = './images/apple_ania.jpg';
-        appleImages.kluski.src = './images/apple_kluski.jpg';
-        appleImages.andrzej.src = './images/apple_andrzej.jpg';
+        appleImages.ewa.src = '/images/apple_ewa.jpg';
+        appleImages.dawid.src = '/images/apple_dawid.jpg';
+        appleImages.pawel.src = '/images/apple_pawel.jpg';
+        appleImages.ola.src = '/images/apple_ola.jpg';
+        appleImages.ala.src = '/images/apple_ala.jpg';
+        appleImages.kuba.src = '/images/apple_kuba.jpg';
+        appleImages.maciek.src = '/images/apple_maciek.jpg';
+        appleImages.ania.src = '/images/apple_ania.jpg';
+        appleImages.kluski.src = '/images/apple_kluski.jpg';
+        appleImages.andrzej.src = '/images/apple_andrzej.jpg';
         
         // Array of apple types to choose from
         const appleTypes = ['ewa', 'dawid', 'pawel', 'ola', 'ala', 'kuba', 'maciek', 'ania', 'andrzej'];
@@ -354,6 +371,11 @@
 
         function addPoints(points) {
             score += points;
+            setPoints(score);
+        }
+
+        function setPoints(points) {
+            score = points;
             document.getElementById('gameScore').innerText = 'Punkty: ' + score;
         }
 
@@ -567,12 +589,12 @@
                 case 'ewa':
                     addPoints(10);
                     // Increase game speed by 2x for 5 seconds (5000 ms)
-                    setSpeedEffect('increase', 5000);
+                    setSpeedEffect('increase', 3000);
                     break;
-                case 'dawid':
+                case 'andrzej':
                     addPoints(20);
-                    // Decrease game speed (i.e. slower) by 2x for 5 seconds.
-                    setSpeedEffect('decrease', 5000);
+                    // remove all apples
+                    apples = [];
                     break;
                 case 'pawel':
                     addPoints(30);
@@ -616,7 +638,7 @@
                     addPoints(100);
                     uncreatedTails += 3;
                     break;
-                case 'andrzej':
+                case 'dawid':
                     addPoints(50);
                     snake.push({x: tail.x, y: tail.y});
                     // Generate 3 additional random apples
@@ -638,18 +660,8 @@
 
         function gameOver() {
             clearInterval(gameInterval);
-            displayGameOver();
             addScore(playerName, score, snake.length);
-            // console.log('Game over! Score: ' + score);
-            // console.log('Snake length: ' + snake.length);
-            // reset game state
-            // snake = [{x: 10, y: 10}];
-            // velocity = {x: 0, y: 0};
-            // apples = [];
-            // score = 0;
-            // currentSpeed = normalSpeed;
-            // resetSpeed();
-            // gameInterval = setInterval(gameLoop, currentSpeed);
+            setTimeout(displayGameOver, 1000);
         }
 
         function startGame() {
@@ -659,6 +671,7 @@
             score = 0;
             currentSpeed = normalSpeed;
             uncreatedTails = 0;
+            setPoints(score);
             resetSpeed();
         }
 

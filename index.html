@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Helsnake</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <style>
         body {
             background: #ffa1bb;
@@ -289,12 +290,12 @@
                 <tr>
                     <td>Paweł</td>
                     <td><image width="80px" src="./images/apple_pawel.jpg"></image></td>
-                    <td>+40 punktów<br>To Twój najlepszy przyjaciel.<br>Skraca węża o połowę.</td>
+                    <td>+50 punktów<br>To Twój najlepszy przyjaciel.<br>Skraca węża o połowę.</td>
                 </tr>
                 <tr>
                     <td>Ewa</td>
                     <td><image width="80px" src="./images/apple_ewa.jpg"></image></td>
-                    <td>+10 punktów<br>Przyspiesza węża na 5 sekund.<br>Może dzięki temu posprzątasz szybciej pokój?</td>
+                    <td>+50 punktów<br>Przyspiesza węża na 5 sekund.<br>Może dzięki temu posprzątasz szybciej pokój?</td>
                 </tr>
                 <tr>
                     <td>Dawid</td>
@@ -314,12 +315,12 @@
                 <tr>
                     <td>Ala</td>
                     <td><image width="80px" src="./images/apple_ala.jpg"></image></td>
-                    <td>-100 punktów<br>Ala zabiera punkty. Unikaj jej!<br>Tylko Kuba może sprawić,<br>że Ala zniknie z planszy.</td>
+                    <td>-300 punktów<br>Ala zabiera punkty. Unikaj jej!<br>Tylko Kuba może sprawić,<br>że Ala zniknie z planszy.</td>
                 </tr>
                 <tr>
                     <td>Kuba</td>
                     <td><image width="80px" src="./images/apple_kuba.jpg"></image></td>
-                    <td>+20 punktów<br>Usuwa wszystkie jabłka z planszy.<br>Potem pojawiają się nowe.</td>
+                    <td>+50 punktów<br>Usuwa wszystkie postacie z planszy.<br>Potem pojawiają się nowe.</td>
                 </tr>
                 <tr>
                     <td>Ania</td>
@@ -668,17 +669,17 @@
             const tail = snake[snake.length - 1];
             switch(apple.type) {
                 case 'ewa':
-                    addPoints(10);
+                    addPoints(50);
                     // Increase game speed by 2x for 5 seconds (5000 ms)
                     setSpeedEffect('increase', 3000);
                     break;
                 case 'kuba':
-                    addPoints(20);
+                    addPoints(50);
                     // remove all apples
                     apples = [];
                     break;
                 case 'pawel':
-                    addPoints(30);
+                    addPoints(50);
                     // Set snake length to half (min 1)
                     halfSnakeLength();
                     break;
@@ -686,7 +687,7 @@
                     addPoints(300);
                     break;
                 case 'ala':
-                    addPoints(-100);
+                    addPoints(-300);
                     break;
                 case 'andrzej':
                     addPoints(50);

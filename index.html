@@ -828,7 +828,7 @@
             let data = await response.json();
             let scores = data.record.results;
 
-            let top5 = scores.sort((a, b) => b.score - a.score).slice(0, 5);
+            let top5 = scores.sort((a, b) => b.score - a.score).slice(0, 10);
             let table = document.querySelector('#leaderboard table');
             
             // Clear existing rows but keep the header

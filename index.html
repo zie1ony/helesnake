@@ -269,8 +269,8 @@
             <image width="500" src="./images/logo_large.png"/>
         </div>
         <div class="menuSection">
-            <h2>Runda 2: Mili wkracza do gry</h2>
-            <p>W tej rundzie z pomocą Mili zbierz jeszcze więcej punktów.</p>
+            <h2>Runda 3: 1,2,3 Dejmon Patrzy!</h2>
+            <p>W tej rundzie możesz szybko przegrać.</p>
         </div>
         <div class="menuSection">
             <h2>Nowa gra</h2>
@@ -278,7 +278,7 @@
             <button id="startButton" class="funButton">START</button>
         </div>
         <div id="leaderboard" class="menuSection">
-            <h2>Najlepsze wyniki: Runda 2</h2>
+            <h2>Najlepsze wyniki: Runda 3</h2>
             <table>
                 <tr>
                     <th>Nazwa</th>
@@ -333,7 +333,7 @@
                 <tr>
                     <td>Ewa</td>
                     <td><image width="80px" src="./images/apple_ewa.jpg"></image></td>
-                    <td>+50 punktów<br>Przyspiesza węża na 3 sekundy.<br>Może dzięki temu posprzątasz szybciej pokój?</td>
+                    <td>+50 punktów<br>Przyspiesza węża na 3 sekundy.<br>W tym czasie nie zjada sam siebie.<br>Może dzięki temu posprzątasz szybciej pokój?</td>
                 </tr>
                 <tr>
                     <td>Dawid</td>
@@ -343,7 +343,7 @@
                 <tr>
                     <td>Ola</td>
                     <td><image width="80px" src="./images/apple_ola.png"></image></td>
-                    <td>+300 punktów<br>Ola daje najwięcej punktów!</td>
+                    <td>+300 punktów<br>Ola daje najwięcej punktów!<br>Skraca węża o 5.</td>
                 </tr>
                 <tr>
                     <td>Maciek</td>
@@ -374,6 +374,12 @@
                     <td>Andrzej</td>
                     <td><image width="80px" src="./images/apple_andrzej.png"></image></td>
                     <td>+50 punktów<br>Podwaja długość węża.</td>
+                </tr>
+                <tr>
+                    <td>Dejmon</td>
+                    <td><image width="80px" src="./images/apple_dejmon.png"></image></td>
+                    <td>Dejmon Cię dostrzegł.</br>Game Over!</td>
+                </tr>
             </table>
         </div>
         <div id="footer">
@@ -439,6 +445,10 @@
         let speedEffect = null;
         let speedEffectTimer = null;
 
+        // Ewa Mode
+        let ewaMode = false;
+        let ewaModeTimer = null;
+
         // Preload snake head image
         const snakeHeadImage = new Image();
         snakeHeadImage.src = './images/snake_hela.jpg';
@@ -455,7 +465,8 @@
             ania: new Image(),
             kluski: new Image(),
             andrzej: new Image(),
-            mili: new Image()
+            mili: new Image(),
+            dejmon: new Image()
         };
         appleImages.ewa.src = './images/apple_ewa.jpg';
         appleImages.dawid.src = './images/apple_dawid.png';
@@ -468,20 +479,22 @@
         appleImages.kluski.src = './images/apple_kluski.png';
         appleImages.andrzej.src = './images/apple_andrzej.png';
         appleImages.mili.src = './images/apple_mili.png';
+        appleImages.dejmon.src = './images/apple_dejmon.png';
         
         // Array of apple types to choose from
         const appleFrequencies = {
-            ewa: 1,
-            dawid: 1,
-            pawel: 1,
-            ola: 1,
-            ala: 1,
-            kuba: 1,
-            maciek: 1,
-            ania: 1,
+            ewa: 5,
+            dawid: 5,
+            pawel: 5,
+            ola: 5,
+            ala: 5,
+            kuba: 5,
+            maciek: 5,
+            ania: 5,
             kluski: 0,
-            andrzej: 1,
-            mili: 5
+            andrzej: 5,
+            mili: 5,
+            dejmon: 2
         };
 
         let appleTypes = []
@@ -509,6 +522,29 @@
         function halfSnakeLength() {
             let fullLength = snakeFullLength();
             let targetLength = Math.floor(fullLength / 2);
+            let realLength = snake.length;
+            const reduction = fullLength - targetLength;
+            let reductionRemaining = reduction;
+            if (uncreatedTails >= reductionRemaining) {
+                uncreatedTails -= reductionRemaining;
+            } else {
+                reductionRemaining -= uncreatedTails;
+                uncreatedTails = 0;
+                while (reductionRemaining > 0 && snake.length > 1) {
+                    snake.pop();
+                    reductionRemaining--;
+                }
+            }
+        }
+
+        function shortenSnake(length) {
+            let fullLength = snakeFullLength();
+            let targetLength;
+            if (fullLength <= length) {
+                targetLength = 1;
+            } else {
+                targetLength = Math.floor(fullLength - length);
+            }
             let realLength = snake.length;
             const reduction = fullLength - targetLength;
             let reductionRemaining = reduction;
@@ -553,9 +589,11 @@
             else if (head.y >= tileCount) head.y = 0;
 
             // collision with self
-            for (let segment of snake) {
-                if (segment.x === head.x && segment.y === head.y) {
-                    return gameOver();
+            if (!ewaMode) {
+                for (let segment of snake) {
+                    if (segment.x === head.x && segment.y === head.y) {
+                        return gameOver();
+                    }
                 }
             }
             snake.unshift(head);
@@ -626,11 +664,13 @@
             // display score
             // ctx.fillStyle = '#000';
             // ctx.font = '20px Arial';
+            // ctx.fillText('EwaMode: ' + ewaMode, 10, 20);
             // draw speed
             // ctx.fillText('Speed: ' + currentSpeed, 10, 20);
             // ctx.fillText('Points: ' + score, 10, 20);
             // ctx.fillText('Length: ' + snake.length, 10, 40);
             // ctx.fillText('Reamining tails: ' + uncreatedTails, 10, 60);
+
         }
 
         function keyDown(event) {
@@ -722,6 +762,14 @@
             speedEffectTimer = setTimeout(resetSpeed, duration);
         }
 
+        function setEwaMode(duration) {
+            clearTimeout(ewaModeTimer);
+            ewaMode = true;
+            ewaModeTimer = setTimeout(() => {
+                ewaMode = false;
+            }, duration);
+        }
+
         function resetSpeed() {
             speedEffect = null;
             currentSpeed = normalSpeed;
@@ -738,6 +786,7 @@
                     addPoints(50);
                     // Increase game speed by 2x for 5 seconds (5000 ms)
                     setSpeedEffect('increase', 3000);
+                    setEwaMode(3000);
                     break;
                 case 'mili':
                     addPoints(100);
@@ -755,6 +804,7 @@
                     break;
                 case 'ola':
                     addPoints(300);
+                    shortenSnake(6);
                     break;
                 case 'ala':
                     addPoints(-300);
@@ -807,6 +857,10 @@
                         }
                     }
                     break;
+                case 'dejmon':
+                    // Game Over
+                    gameOver();
+                    break;
             }
         }
 
@@ -823,6 +877,7 @@
             score = 0;
             currentSpeed = normalSpeed;
             uncreatedTails = 0;
+            ewaMode = false;
             setPoints(score);
             resetSpeed();
         }
@@ -868,8 +923,10 @@
             let data = await response.json();
             let scores = data.record.results;
 
-            // Filter results before 2025-02-21
-            scores = scores.filter(result => new Date(result.time) > new Date('2025-02-21T05:00:00Z'));
+            // Round 2: 2025-02-21 
+            // Round 3: 2025-03-19 18:00:00
+            
+            scores = scores.filter(result => new Date(result.time) > new Date('2025-03-19T18:00:00Z'));
             console.log(scores);
 
             let top5 = scores.sort((a, b) => b.score - a.score).slice(0, 10);

@@ -61,7 +61,7 @@ Constraints: If eaten by the snake, that already has this effect, the effect is 
 
 ## Apple Dawid
 
-Image: /images/apple_dawid.jpg
+Image: /images/apple_dawid.png
 Reward: +20 points
 Snake length: +1
 Special effect: game speed decreases by 2x for 5 seconds.
@@ -104,7 +104,7 @@ Special effect:
 
 ## Apple Ania
 
-Image: /images/apple_ania.jpg
+Image: /images/apple_ania.png
 Reward: +50 points
 Snake length: +1
 Special effect: It generates 3 additional Apple Kluski on the board.
